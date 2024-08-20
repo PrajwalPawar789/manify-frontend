@@ -64,6 +64,7 @@ export default function SearchPage() {
       // Check if any filter is selected
       if (
         selectedIndustries.length > 0 ||
+        selectedSubIndustries.length > 0 ||
         selectedTitles.length > 0 ||
         selectedTitles1.length > 0 ||
         selectedTitles3.length > 0 ||
@@ -88,6 +89,7 @@ export default function SearchPage() {
           },
           body: JSON.stringify({
             selectedIndustries,
+            selectedSubIndustries,
             selectedTitles,
             selectedTitles1,
             selectedTitles3,
@@ -128,6 +130,7 @@ export default function SearchPage() {
     fetchFilteredProspects();
   }, [
     selectedIndustries,
+    selectedSubIndustries,
     selectedTitles,
     selectedTitles1,
     selectedTitles3,
@@ -157,6 +160,7 @@ export default function SearchPage() {
         },
         body: JSON.stringify({
           selectedIndustries,
+          selectedSubIndustries,
           selectedTitles,
           selectedTitles1,
           selectedTitles3,
