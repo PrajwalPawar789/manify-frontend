@@ -42,6 +42,8 @@ export default function SearchPage() {
   const [regionSearchTerm, setRegionSearchTerm] = useState("");
   const [selectedSizes, setSelectedSizes] = useState([]);
   const [sizeSearchTerm, setSizeSearchTerm] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
   const [selectedIncludedCompanies, setSelectedIncludedCompanies] = useState(
     []
   );
@@ -62,7 +64,6 @@ export default function SearchPage() {
       // Check if any filter is selected
       if (
         selectedIndustries.length > 0 ||
-        selectedSubIndustries.length > 0 ||
         selectedTitles.length > 0 ||
         selectedTitles1.length > 0 ||
         selectedTitles3.length > 0 ||
@@ -80,14 +81,13 @@ export default function SearchPage() {
         selectedIncludedCompanies3.length > 0 ||
         selectedIncludedCompanies4.length > 0
       ) {
-        const response = await fetch("http://localhost:5000/api/v1/fetchLeads", {
+        const response = await fetch("http://localhost:5030/api/v1/fetchLeads", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
             selectedIndustries,
-            selectedSubIndustries,
             selectedTitles,
             selectedTitles1,
             selectedTitles3,
@@ -124,11 +124,10 @@ export default function SearchPage() {
       }
       setLoading(false);
     };
-  
+    
     fetchFilteredProspects();
   }, [
     selectedIndustries,
-    selectedSubIndustries,
     selectedTitles,
     selectedTitles1,
     selectedTitles3,
@@ -149,15 +148,15 @@ export default function SearchPage() {
   
 
   const handleDownload = async () => {
+    setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:5000/api/v1/fetchLeads1", {
+      const response = await fetch("http://localhost:5030/api/v1/fetchLeads1", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           selectedIndustries,
-          selectedSubIndustries,
           selectedTitles,
           selectedTitles1,
           selectedTitles3,
@@ -173,7 +172,7 @@ export default function SearchPage() {
           selectedIncludedCompanies,
           selectedExcludedCompanies,
           selectedIncludedCompanies3,
-          selectedIncludedCompanies4
+          selectedIncludedCompanies4,
         }),
       });
 
@@ -181,9 +180,10 @@ export default function SearchPage() {
         const data = await response.json();
         if (data.success) {
           if (totalContacts > 200000) {
-            alert(`Cannot download. The record count is ${data.totalRecords}, which exceeds the limit of 200,000.`);
-          }
-          else {
+            alert(
+              `Cannot download. The record count is ${data.totalRecords}, which exceeds the limit of 200,000.`
+            );
+          } else {
             const worksheet = XLSX.utils.json_to_sheet(data.data);
             const workbook = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(workbook, worksheet, "Prospects");
@@ -197,6 +197,8 @@ export default function SearchPage() {
       }
     } catch (error) {
       console.error("Error during download:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -401,11 +403,40 @@ export default function SearchPage() {
               totalCompanies={totalCompanies}
             />
             <button
-              onClick={handleDownload}
-              className="bg-blue-500 text-white px-4 py-2 rounded"
-            >
-              Download Excel
-            </button>
+      onClick={handleDownload}
+      className={`relative flex items-center bg-blue-100 text-blue-800 text-sm font-semibold px-4 py-2 rounded-md transition-all duration-300 hover:from-blue-600 hover:to-blue-800 focus:outline-none ${
+        isLoading ? "cursor-not-allowed" : ""
+      }`}
+      disabled={isLoading}
+    >
+      {isLoading ? (
+        <>
+          <svg
+            className="animate-spin h-5 w-5 mr-3 text-white"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+            ></circle>
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0c-5.523 0-10 4.477-10 10h2zm2 5.291A7.952 7.952 0 014 12H2c0 2.21.896 4.21 2.344 5.656l1.656-1.365z"
+            ></path>
+          </svg>
+          Downloading...
+        </>
+      ) : (
+        "Download Excel"
+      )}
+    </button>
           </div>
 
           <section aria-labelledby="prospects-heading" className="pb-24 pt-6">
@@ -487,7 +518,7 @@ export default function SearchPage() {
                 {loading ? (
                   <Loader />
                 ) : (
-                  <h1>Successful</h1>
+                  <h1>successful</h1>
                   // <ProspectTable prospects={fetchedProspects} />
                 )}
               </div>

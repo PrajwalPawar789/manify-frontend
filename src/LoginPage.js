@@ -2,8 +2,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import Logo from './Manify-logo.png'; // Your logo image
-import YourImage from './Manifythumbnail.jpg'; // The background or thematic image for the login page
+import Logo from './MANLITICS-LOGOn.webp'; // Your logo image
 
 const LoginPage = () => {
     // State hooks for username and password
@@ -19,7 +18,7 @@ const LoginPage = () => {
         try {
             // Attempt to login via your API
             const response = await axios.post(
-                'http://localhost:5000/api/v1/login',
+                'http://localhost:5030/api/v1/login',
                 { username, password },
                 { withCredentials: true }
             );
@@ -47,11 +46,11 @@ const LoginPage = () => {
                     <h2 className="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900">
                         Log in to your account
                     </h2>
-                    <p className="mt-2 text-center text-sm leading-5 text-gray-600">
+                    {/* <p className="mt-2 text-center text-sm leading-5 text-gray-600">
                         Or <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150">
                             start your 14-day free trial
                         </a>
-                    </p>
+                    </p> */}
                     <div className="mt-8 bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
                         <form className="space-y-6" onSubmit={handleLogin}>
                             {/* Username Input */}
@@ -73,8 +72,8 @@ const LoginPage = () => {
                                 </div>
                             </div>
                             {/* Remember Me and Forgot Password */}
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center">
+                            {/* <div className="flex items-center justify-between"> */}
+                                {/* <div className="flex items-center">
                                     <input id="remember_me" type="checkbox" className="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"/>
                                     <label htmlFor="remember_me" className="ml-2 block text-sm leading-5 text-gray-900">
                                         Remember me
@@ -84,8 +83,8 @@ const LoginPage = () => {
                                     <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150">
                                         Forgot your password?
                                     </a>
-                                </div>
-                            </div>
+                                </div> */}
+                            {/* </div> */}
                             {/* Submit Button */}
                             <div>
                             <button type="submit" className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">

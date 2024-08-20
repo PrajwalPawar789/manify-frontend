@@ -157,13 +157,13 @@ const ProspectTable = ({ prospects }) => {
                       className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 max-w-0 overflow-hidden text-ellipsis hover:text-blue-600 cursor-pointer"
                       title={prospect.job_title}
                     >
-                      <span className="truncate">{prospect.job_title}</span>
+                      <span className="truncate">{prospect.jobTitle}</span>
                     </td>
                     <td
                       className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 max-w-0 overflow-hidden text-ellipsis hover:text-blue-600 cursor-pointer"
                       title={prospect.company_name}
                     >
-                      <span className="truncate">{prospect.company_name}</span>
+                      <span className="truncate">{prospect.companyName}</span>
                     </td>
                     <td
                       className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 max-w-0 overflow-hidden text-ellipsis hover:text-blue-600 cursor-pointer"
@@ -173,7 +173,7 @@ const ProspectTable = ({ prospects }) => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <button
-                        onClick={() => fetchProspectDetails(prospect.uuid)}
+                        onClick={() => fetchProspectDetails(prospect.sr_no)}
                         className="inline-flex items-center px-3 py-1 border border-transparent rounded-md shadow-sm text-sm font-medium text-blue-600 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                       >
                         Show details
@@ -214,8 +214,8 @@ const ProspectTable = ({ prospects }) => {
                               </a>
                             </div>
                             <div className="text-gray-700">
-                              <div>{selectedProspectDetails?.job_title}</div>
-                              <div>{selectedProspectDetails?.company_name}</div>
+                              <div>{selectedProspectDetails?.jobTitle}</div>
+                              <div>{selectedProspectDetails?.companyName}</div>
                             </div>
                             <div className="flex flex-col space-y-2 pt-2 border-t border-gray-100">
                               <div>

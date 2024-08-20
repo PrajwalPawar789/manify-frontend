@@ -10,7 +10,7 @@ const PrivateRoutes = () => {
         const checkAuthentication = async () => {
             try {
                 // Send a request to a protected endpoint to check authentication
-                await axios.get('http://localhost:5000/api/v1/search', { withCredentials: true });
+                await axios.get('http://localhost:5030/api/v1/search', { withCredentials: true });
                 // If request succeeds, the user is authenticated
                 setAuthenticated(true);
             } catch (error) {
