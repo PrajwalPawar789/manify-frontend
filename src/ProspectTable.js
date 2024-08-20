@@ -18,7 +18,7 @@ const ProspectTable = ({ prospects }) => {
     } else {
       // Fetch new details and expand the new row
       const response = await fetch(
-        `http://localhost:5000/api/v1/prospectDetails/${uuid}`
+        `http://192.168.1.36:5030/api/v1/prospectDetails/${uuid}`
       );
       if (response.ok) {
         const data = await response.json();

@@ -18,7 +18,7 @@ const LoginPage = () => {
         try {
             // Attempt to login via your API
             const response = await axios.post(
-                'http://localhost:5030/api/v1/login',
+                'http://192.168.1.36:5030/api/v1/login',
                 { username, password },
                 { withCredentials: true }
             );
