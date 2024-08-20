@@ -516,7 +516,7 @@ const filters = [
         { value: "Manager", label: "Manager" },
         { value: "Board Memebers and Owners", label: "Board Memebers and Owners" },
         { value: "Individual Contributor", label: "Individual Contributor" },
-        { value: "VP Level", label: "VP Level" },
+        { value: "Vice President", label: "Vice President" },
         { value: "Director", label: "Director" },
         { value: "C Level", label: "C Level" },
         { value: "Supervisor", label: "Supervisor" },
