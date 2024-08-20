@@ -34,7 +34,7 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       await axios.post('http://192.168.1.36:5030/api/v1/logout', {}, { withCredentials: true });
-      document.cookie = 'jwt=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
+      // document.cookie = 'jwt=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
       navigate('/login');
     } catch (error) {
       console.error('Logout failed:', error);
