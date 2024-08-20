@@ -81,7 +81,7 @@ export default function SearchPage() {
         selectedIncludedCompanies3.length > 0 ||
         selectedIncludedCompanies4.length > 0
       ) {
-        const response = await fetch("http://localhost:5030/api/v1/fetchLeads", {
+        const response = await fetch("http://192.168.1.36:5030/api/v1/fetchLeads", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -150,7 +150,7 @@ export default function SearchPage() {
   const handleDownload = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:5030/api/v1/fetchLeads1", {
+      const response = await fetch("http://192.168.1.36:5030/api/v1/fetchLeads1", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
