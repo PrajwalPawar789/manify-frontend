@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import ProspectTable from "./ProspectTable";
 import Loader from "./Loader";
 import Contactandcompany from "./contactandcompany";
@@ -43,6 +43,7 @@ export default function SearchPage() {
   const [selectedSizes, setSelectedSizes] = useState([]);
   const [sizeSearchTerm, setSizeSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const abortControllerRef = useRef(null); // Reference to AbortController
 
   const [selectedIncludedCompanies, setSelectedIncludedCompanies] = useState(
     []
@@ -59,6 +60,12 @@ export default function SearchPage() {
 
   useEffect(() => {
     const fetchFilteredProspects = async () => {
+
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort(); // Abort any ongoing request
+      }
+      abortControllerRef.current = new AbortController(); // Create a new controller
+      
       setLoading(true);
   
       // Check if any filter is selected
@@ -107,19 +114,27 @@ export default function SearchPage() {
             selectedIncludedCompanies3,
             selectedIncludedCompanies4,
           }),
+          signal: abortControllerRef.current.signal // Pass the AbortSignal to the request
         });
   
         if (response.ok) {
-          const data = await response.json();
-          console.log("Fetched data:", data.data);
-          if (data.success) {
-            setTotalContacts(data.data[0].totalContacts);
-            setTotalCompanies(data.data[0].totalCompanies);
+            const data = await response.json();
+            console.log("Fetched data:", data.data);
+            if (data.success) {
+              setTotalContacts(data.data[0].totalContacts);
+              setTotalCompanies(data.data[0].totalCompanies);
+            } else {
+              console.error("Failed to fetch counts:", data.message);
+            }
           } else {
-            console.error("Failed to fetch counts:", data.message);
+            console.error("Failed to fetch prospects");
           }
-        } else {
-          console.error("Failed to fetch prospects");
+        } catch (error) {
+          if (error.name === 'AbortError') {
+            console.log('Request aborted:', error.message);
+          } else {
+            console.error('Error fetching prospects:', error);
+          }
         }
       } else {
         console.log("No filters selected, skipping API call.");
