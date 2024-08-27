@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import ProspectTable from "./ProspectTable";
 import Loader from "./Loader";
 import Contactandcompany from "./contactandcompany";
@@ -43,7 +43,6 @@ export default function SearchPage() {
   const [selectedSizes, setSelectedSizes] = useState([]);
   const [sizeSearchTerm, setSizeSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const abortControllerRef = useRef(null); // Reference to AbortController
 
   const [selectedIncludedCompanies, setSelectedIncludedCompanies] = useState(
     []
@@ -60,12 +59,6 @@ export default function SearchPage() {
 
   useEffect(() => {
     const fetchFilteredProspects = async () => {
-
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort(); // Abort any ongoing request
-      }
-      abortControllerRef.current = new AbortController(); // Create a new controller
-      
       setLoading(true);
   
       // Check if any filter is selected
@@ -89,53 +82,44 @@ export default function SearchPage() {
         selectedIncludedCompanies3.length > 0 ||
         selectedIncludedCompanies4.length > 0
       ) {
-        try {
-          const response = await fetch("http://192.168.1.36:5030/api/v1/fetchLeads", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              selectedIndustries,
-              selectedSubIndustries,
-              selectedTitles,
-              selectedTitles1,
-              selectedTitles3,
-              selectedTitles4,
-              selectedLevels,
-              selectedFunctions,
-              selectedSizes,
-              companyName,
-              selectedCountry,
-              selectedRegion,
-              selectedState,
-              selectedCity,
-              selectedIncludedCompanies,
-              selectedExcludedCompanies,
-              selectedIncludedCompanies3,
-              selectedIncludedCompanies4,
-            }),
-            signal: abortControllerRef.current.signal // Pass the AbortSignal to the request
-          });
-
-          if (response.ok) {
-            const data = await response.json();
-            console.log("Fetched data:", data.data);
-            if (data.success) {
-              setTotalContacts(data.data[0].totalContacts);
-              setTotalCompanies(data.data[0].totalCompanies);
-            } else {
-              console.error("Failed to fetch counts:", data.message);
-            }
+        const response = await fetch("http://192.168.1.36:5030/api/v1/fetchLeads", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            selectedIndustries,
+            selectedSubIndustries,
+            selectedTitles,
+            selectedTitles1,
+            selectedTitles3,
+            selectedTitles4,
+            selectedLevels,
+            selectedFunctions,
+            selectedSizes,
+            companyName,
+            selectedCountry,
+            selectedRegion,
+            selectedState,
+            selectedCity,
+            selectedIncludedCompanies,
+            selectedExcludedCompanies,
+            selectedIncludedCompanies3,
+            selectedIncludedCompanies4,
+          }),
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+          console.log("Fetched data:", data.data);
+          if (data.success) {
+            setTotalContacts(data.data[0].totalContacts);
+            setTotalCompanies(data.data[0].totalCompanies);
           } else {
-            console.error("Failed to fetch prospects");
+            console.error("Failed to fetch counts:", data.message);
           }
-        } catch (error) {
-          if (error.name === 'AbortError') {
-            console.log('Request aborted:', error.message);
-          } else {
-            console.error('Error fetching prospects:', error);
-          }
+        } else {
+          console.error("Failed to fetch prospects");
         }
       } else {
         console.log("No filters selected, skipping API call.");
