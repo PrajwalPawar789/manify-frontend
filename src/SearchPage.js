@@ -89,35 +89,36 @@ export default function SearchPage() {
         selectedIncludedCompanies3.length > 0 ||
         selectedIncludedCompanies4.length > 0
       ) {
-        const response = await fetch("http://192.168.1.36:5030/api/v1/fetchLeads", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            selectedIndustries,
-            selectedSubIndustries,
-            selectedTitles,
-            selectedTitles1,
-            selectedTitles3,
-            selectedTitles4,
-            selectedLevels,
-            selectedFunctions,
-            selectedSizes,
-            companyName,
-            selectedCountry,
-            selectedRegion,
-            selectedState,
-            selectedCity,
-            selectedIncludedCompanies,
-            selectedExcludedCompanies,
-            selectedIncludedCompanies3,
-            selectedIncludedCompanies4,
-          }),
-          signal: abortControllerRef.current.signal // Pass the AbortSignal to the request
-        });
-  
-        if (response.ok) {
+        try {
+          const response = await fetch("http://192.168.1.36:5030/api/v1/fetchLeads", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              selectedIndustries,
+              selectedSubIndustries,
+              selectedTitles,
+              selectedTitles1,
+              selectedTitles3,
+              selectedTitles4,
+              selectedLevels,
+              selectedFunctions,
+              selectedSizes,
+              companyName,
+              selectedCountry,
+              selectedRegion,
+              selectedState,
+              selectedCity,
+              selectedIncludedCompanies,
+              selectedExcludedCompanies,
+              selectedIncludedCompanies3,
+              selectedIncludedCompanies4,
+            }),
+            signal: abortControllerRef.current.signal // Pass the AbortSignal to the request
+          });
+
+          if (response.ok) {
             const data = await response.json();
             console.log("Fetched data:", data.data);
             if (data.success) {
