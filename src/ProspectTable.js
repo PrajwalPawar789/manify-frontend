@@ -136,9 +136,9 @@ const ProspectTable = ({ prospects }) => {
                 >
                   Industry
                 </th>
-                <th scope="col" className="relative px-6 py-3">
+                {/* <th scope="col" className="relative px-6 py-3">
                   <span className="sr-only">Show details</span>
-                </th>
+                </th> */}
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
@@ -171,14 +171,14 @@ const ProspectTable = ({ prospects }) => {
                     >
                       <span className="truncate">{prospect.industry}</span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    {/* <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <button
                         onClick={() => fetchProspectDetails(prospect.sr_no)}
                         className="inline-flex items-center px-3 py-1 border border-transparent rounded-md shadow-sm text-sm font-medium text-blue-600 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                       >
                         Show details
                       </button>
-                    </td>
+                    </td> */}
                   </tr>
                   {expandedRowUuid === prospect.uuid && (
                     <tr className="bg-gray-50">
