@@ -82,7 +82,8 @@ export default function SearchPage() {
         selectedIncludedCompanies3.length > 0 ||
         selectedIncludedCompanies4.length > 0
       ) {
-        const response = await fetch("http://192.168.1.36:5030/api/v1/fetchLeads", {
+        // First API call
+        const response1 = await fetch("http://192.168.1.36:5030/api/v1/fetchLeads", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -109,24 +110,64 @@ export default function SearchPage() {
           }),
         });
   
-        if (response.ok) {
-          const data = await response.json();
-          console.log("Fetched data:", data.data);
-          if (data.success) {
-            setTotalContacts(data.data[0].totalContacts);
-            setTotalCompanies(data.data[0].totalCompanies);
+        if (response1.ok) {
+          const data1 = await response1.json();
+          console.log("Fetched data from first API:", data1.data);
+          if (data1.success) {
+            setTotalContacts(data1.data[0].totalContacts);
+            setTotalCompanies(data1.data[0].totalCompanies);
           } else {
-            console.error("Failed to fetch counts:", data.message);
+            console.error("Failed to fetch counts from first API:", data1.message);
           }
         } else {
-          console.error("Failed to fetch prospects");
+          console.error("Failed to fetch prospects from first API");
+        }
+  
+        // Second API call
+        const response2 = await fetch("http://192.168.1.36:5030/api/v1/fetchLeads2", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            selectedIndustries,
+            selectedSubIndustries,
+            selectedTitles,
+            selectedTitles1,
+            selectedTitles3,
+            selectedTitles4,
+            selectedLevels,
+            selectedFunctions,
+            selectedSizes,
+            companyName,
+            selectedCountry,
+            selectedRegion,
+            selectedState,
+            selectedCity,
+            selectedIncludedCompanies,
+            selectedExcludedCompanies,
+            selectedIncludedCompanies3,
+            selectedIncludedCompanies4,
+          }),
+        });
+
+  
+        if (response2.ok) {
+          const data2 = await response2.json();
+          setFetchedProspects(data2.data);
+
+          console.log("Fetched data from second API:", data2.data);
+          // Handle data from the second API call as needed
+        } else {
+          console.error("Failed to fetch prospects from second API");
         }
       } else {
-        console.log("No filters selected, skipping API call.");
+        console.log("No filters selected, skipping API calls.");
       }
+  
       setLoading(false);
     };
-    
+  
     fetchFilteredProspects();
   }, [
     selectedIndustries,
@@ -148,6 +189,7 @@ export default function SearchPage() {
     selectedIncludedCompanies3,
     selectedIncludedCompanies4,
   ]);
+  
   
 
   const handleDownload = async () => {
@@ -518,14 +560,22 @@ export default function SearchPage() {
                 />
               </form>
 
-              <div className="lg:col-span-3">
+              {/* <div className="lg:col-span-3">
                 {loading ? (
                   <Loader />
                 ) : (
                   <h1>successful</h1>
                   // <ProspectTable prospects={fetchedProspects} />
                 )}
+              </div> */}
+              <div className="lg:col-span-3">
+                {loading ? (
+                  <Loader />
+                ) : (
+                  <ProspectTable prospects={fetchedProspects} />
+                )}
               </div>
+
             </div>
           </section>
         </main>
