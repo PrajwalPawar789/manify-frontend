@@ -6,15 +6,14 @@ const filters = [
     name: "Employee",
     options: 
       [
-        { value: "0-1 employees", label: "0-1" },
-        { value: "2-10 employees", label: "2-10" },
-        { value: "11-50 employees", label: "11-50" },
-        { value: "51-200 employees", label: "51-200" },
-        { value: "201-500 employees", label: "201-500" },
-        { value: "501-1,000 employees", label: "501-1,000" },
-        { value: "1,001-5,000 employees", label: "1,001-5,000" },
-        { value: "5,001-10,000 employees", label: "5,001-10,000" },
-        { value: "10,001+ employees", label: "10,001+" }
+        { value: "1-10 employees", label: "1-10 employees" },
+        { value: "11-50 employees", label: "11-50 employees" },
+        { value: "51-200 employees", label: "51-200 employees" },
+        { value: "201-500 employees", label: "201-500 employees" },
+        { value: "501-1,000 employees", label: "501-1,000 employees" },
+        { value: "1,001-5,000 employees", label: "1,001-5,000 employees" },
+        { value: "5,001-10,000 employees", label: "5,001-10,000 employees" },
+        { value: "10,001+ employees", label: "10,001+ employees" },
       ],
     },
     {
