@@ -58,6 +58,15 @@ const filters = [
       ],
     },
     {
+      id: "Lead Tagging",
+      name: "Lead Tagging",
+      options: [
+        { value: "Hot lead L1", label: "Hot lead L1" },
+        { value: "Hot lead L2", label: "Hot lead L2" },
+        { value: "Verified", label: "Verified" }
+      ],
+    },
+    {
       id: "region",
       name: "Region",
       options: [

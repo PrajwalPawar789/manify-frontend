@@ -13,6 +13,7 @@ import CompanyNameFilter from "./CompanyNameFilter";
 import Sub_Industry from './Sub_Industry';
 import Region from './Region'
 import * as XLSX from "xlsx";
+import LeadTaggingFilter from "./LeadTaggingFilter";
 
 export default function SearchPage() {
   const [selectedCountry, setSelectedCountry] = useState("");
@@ -41,7 +42,11 @@ export default function SearchPage() {
   const [countrySearchTerm, setCountrySearchTerm] = useState("");
   const [regionSearchTerm, setRegionSearchTerm] = useState("");
   const [selectedSizes, setSelectedSizes] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([]);
+
   const [sizeSearchTerm, setSizeSearchTerm] = useState("");
+  const [tagSearchTerm, setTagSearchTerm] = useState("");
+
   const [isLoading, setIsLoading] = useState(false);
 
   const [selectedIncludedCompanies, setSelectedIncludedCompanies] = useState(
@@ -72,6 +77,7 @@ export default function SearchPage() {
         selectedLevels.length > 0 ||
         selectedFunctions.length > 0 ||
         selectedSizes.length > 0 ||
+        selectedTags.length > 0 ||
         companyName ||
         selectedCountry ||
         selectedRegion ||
@@ -98,6 +104,7 @@ export default function SearchPage() {
             selectedLevels,
             selectedFunctions,
             selectedSizes,
+            selectedTags,
             companyName,
             selectedCountry,
             selectedRegion,
@@ -139,6 +146,7 @@ export default function SearchPage() {
             selectedLevels,
             selectedFunctions,
             selectedSizes,
+            selectedTags,
             companyName,
             selectedCountry,
             selectedRegion,
@@ -179,6 +187,7 @@ export default function SearchPage() {
     selectedLevels,
     selectedFunctions,
     selectedSizes,
+    selectedTags,
     companyName,
     selectedCountry,
     selectedRegion,
@@ -210,6 +219,7 @@ export default function SearchPage() {
           selectedLevels,
           selectedFunctions,
           selectedSizes,
+          selectedTags,
           companyName,
           selectedCountry,
           selectedRegion,
@@ -342,8 +352,20 @@ export default function SearchPage() {
     );
   };
 
+  const handleTagSelection = (selectedOption) => {
+    setSelectedTags((prevSelected) =>
+      prevSelected.includes(selectedOption)
+        ? prevSelected.filter((size) => size !== selectedOption)
+        : [...prevSelected, selectedOption]
+    );
+  };
+
   const handleSizeSearchChange = (event) => {
     setSizeSearchTerm(event.target.value.toLowerCase());
+  };
+
+  const handleTagSearchChange = (event) => {
+    setTagSearchTerm(event.target.value.toLowerCase());
   };
 
   const handleFunctionSelection = (selectedOption) => {
@@ -546,6 +568,14 @@ export default function SearchPage() {
                   sizeSearchTerm={sizeSearchTerm}
                   handleSizeSearchChange={handleSizeSearchChange}
                 />
+
+                <LeadTaggingFilter
+                  selectedTags={selectedTags}
+                  handleTagSelection={handleTagSelection}
+                  handleTagSearchChange={handleTagSearchChange}
+                  tagSearchTerm={tagSearchTerm}
+                />
+
                 <CountryFilter
                   selectedCountry={selectedCountry}
                   handleCountrySelection={handleCountrySelection}
