@@ -13,7 +13,7 @@ const Contactandcompany = ({ totalContacts, totalCompanies }) => {
 
   useEffect(() => {
     if (contacts === 0 && companies === 0) {
-      axios.get('http://192.168.1.36:5030/api/v1/databasecount')
+      axios.get('http://localhost:5030/api/v1/databasecount')
         .then(response => {
           console.log(response);
           setContacts(response.data.data.totalContacts);

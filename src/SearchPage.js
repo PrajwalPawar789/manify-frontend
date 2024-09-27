@@ -235,7 +235,7 @@ export default function SearchPage() {
       if (response.ok) {
         const data = await response.json();
         if (data.success) {
-          if (totalContacts > 200000) {
+          if (totalContacts > 700000) {
             alert(
               `Cannot download. The record count is ${data.totalRecords}, which exceeds the limit of 200,000.`
             );
