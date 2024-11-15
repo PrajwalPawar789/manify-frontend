@@ -17,6 +17,34 @@ const filters = [
       ],
     },
     {
+      id: "client_code",
+      name: "client_code",
+      options: 
+        [
+          { value: "AD62", label: "AD62" },
+          { value: "AN12", label: "AN12" },
+          { value: "AR13", label: "AR13" },
+          { value: "DI31", label: "DI31" },
+          { value: "DY78", label: "DY78" },
+          { value: "HN36", label: "HN36" },
+          { value: "MA99", label: "MA99" },
+          { value: "NT26", label: "NT26" },
+          { value: "TE16", label: "TE16" },
+          { value: "TE72", label: "TE72" },
+          { value: "UE88", label: "UE88" },
+
+        ],
+      },
+      {
+        id: "msft_non_msft",
+        name: "msft_non_msft",
+        options: 
+          [
+            { value: "MSFT", label: "MSFT" },
+            { value: "Non-MSFT", label: "Non-MSFT" },
+          ],
+        },
+    {
       id: "industry",
       name: "Industry",
       options: [

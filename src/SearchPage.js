@@ -10,10 +10,12 @@ import JobLevelFilter from "./JobLevelFilter";
 import JobFunctionFilter from "./JobFunctionFilter";
 import EmployeeSizeFilter from "./EmployeeSizeFilter";
 import CompanyNameFilter from "./CompanyNameFilter";
-import Sub_Industry from './Sub_Industry';
-import Region from './Region'
+import Sub_Industry from "./Sub_Industry";
+import Region from "./Region";
 import * as XLSX from "xlsx";
 import LeadTaggingFilter from "./LeadTaggingFilter";
+import ClientCodeFilter from "./ClientCodeFilter";
+import MSFTFilter from "./MSFTFilter";
 
 export default function SearchPage() {
   const [selectedCountry, setSelectedCountry] = useState("");
@@ -27,6 +29,10 @@ export default function SearchPage() {
   const [selectedTitles1, setSelectedTitles1] = useState([]);
   const [selectedTitles3, setSelectedTitles3] = useState([]);
   const [selectedTitles4, setSelectedTitles4] = useState([]);
+  const [selectedClientCodes, setSelectedClientCodes] = useState([]);
+  const [clientCodeSearchTerm, setClientCodeSearchTerm] = useState("");
+  const [selectedClients, setSelectedClients] = useState([]);
+  const [clientSearchTerm, setClientSearchTerm] = useState("");
 
   const [selectedLevels, setSelectedLevels] = useState([]);
   const [selectedFunctions, setSelectedFunctions] = useState([]);
@@ -65,7 +71,7 @@ export default function SearchPage() {
   useEffect(() => {
     const fetchFilteredProspects = async () => {
       setLoading(true);
-  
+
       // Check if any filter is selected
       if (
         selectedIndustries.length > 0 ||
@@ -86,37 +92,44 @@ export default function SearchPage() {
         selectedIncludedCompanies.length > 0 ||
         selectedExcludedCompanies.length > 0 ||
         selectedIncludedCompanies3.length > 0 ||
-        selectedIncludedCompanies4.length > 0
+        selectedIncludedCompanies4.length > 0 ||
+        selectedClientCodes.length > 0 ||
+        selectedClients.length > 0
       ) {
         // First API call
-        const response1 = await fetch("http://192.168.1.36:5030/api/v1/fetchLeads", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            selectedIndustries,
-            selectedSubIndustries,
-            selectedTitles,
-            selectedTitles1,
-            selectedTitles3,
-            selectedTitles4,
-            selectedLevels,
-            selectedFunctions,
-            selectedSizes,
-            selectedTags,
-            companyName,
-            selectedCountry,
-            selectedRegion,
-            selectedState,
-            selectedCity,
-            selectedIncludedCompanies,
-            selectedExcludedCompanies,
-            selectedIncludedCompanies3,
-            selectedIncludedCompanies4,
-          }),
-        });
-  
+        const response1 = await fetch(
+          "http://192.168.1.36:5030/api/v1/fetchLeads",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              selectedIndustries,
+              selectedSubIndustries,
+              selectedTitles,
+              selectedTitles1,
+              selectedTitles3,
+              selectedTitles4,
+              selectedLevels,
+              selectedFunctions,
+              selectedSizes,
+              selectedTags,
+              companyName,
+              selectedCountry,
+              selectedRegion,
+              selectedState,
+              selectedCity,
+              selectedIncludedCompanies,
+              selectedExcludedCompanies,
+              selectedIncludedCompanies3,
+              selectedIncludedCompanies4,
+              selectedClientCodes,
+              selectedClients,
+            }),
+          }
+        );
+
         if (response1.ok) {
           const data1 = await response1.json();
           console.log("Fetched data from first API:", data1.data);
@@ -124,42 +137,49 @@ export default function SearchPage() {
             setTotalContacts(data1.data[0].totalContacts);
             setTotalCompanies(data1.data[0].totalCompanies);
           } else {
-            console.error("Failed to fetch counts from first API:", data1.message);
+            console.error(
+              "Failed to fetch counts from first API:",
+              data1.message
+            );
           }
         } else {
           console.error("Failed to fetch prospects from first API");
         }
-  
-        // Second API call
-        const response2 = await fetch("http://192.168.1.36:5030/api/v1/fetchLeads2", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            selectedIndustries,
-            selectedSubIndustries,
-            selectedTitles,
-            selectedTitles1,
-            selectedTitles3,
-            selectedTitles4,
-            selectedLevels,
-            selectedFunctions,
-            selectedSizes,
-            selectedTags,
-            companyName,
-            selectedCountry,
-            selectedRegion,
-            selectedState,
-            selectedCity,
-            selectedIncludedCompanies,
-            selectedExcludedCompanies,
-            selectedIncludedCompanies3,
-            selectedIncludedCompanies4,
-          }),
-        });
 
-  
+        // Second API call
+        const response2 = await fetch(
+          "http://192.168.1.36:5030/api/v1/fetchLeads2",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              selectedIndustries,
+              selectedSubIndustries,
+              selectedTitles,
+              selectedTitles1,
+              selectedTitles3,
+              selectedTitles4,
+              selectedLevels,
+              selectedFunctions,
+              selectedSizes,
+              selectedTags,
+              companyName,
+              selectedCountry,
+              selectedRegion,
+              selectedState,
+              selectedCity,
+              selectedIncludedCompanies,
+              selectedExcludedCompanies,
+              selectedIncludedCompanies3,
+              selectedIncludedCompanies4,
+              selectedClientCodes,
+              selectedClients,
+            }),
+          }
+        );
+
         if (response2.ok) {
           const data2 = await response2.json();
           setFetchedProspects(data2.data);
@@ -170,12 +190,13 @@ export default function SearchPage() {
           console.error("Failed to fetch prospects from second API");
         }
       } else {
-        console.log("No filters selected, skipping API calls.");
+        console.log("No filters selected, skipping API calls...");
+        setFetchedProspects([]); // Clear results when no filters are selected
       }
-  
+
       setLoading(false);
     };
-  
+
     fetchFilteredProspects();
   }, [
     selectedIndustries,
@@ -197,9 +218,9 @@ export default function SearchPage() {
     selectedExcludedCompanies,
     selectedIncludedCompanies3,
     selectedIncludedCompanies4,
+    selectedClientCodes,
+    selectedClients,
   ]);
-  
-  
 
   const handleDownload = async () => {
     setIsLoading(true);
@@ -229,6 +250,8 @@ export default function SearchPage() {
           selectedExcludedCompanies,
           selectedIncludedCompanies3,
           selectedIncludedCompanies4,
+          selectedClientCodes,
+          selectedClients,
         }),
       });
 
@@ -276,6 +299,19 @@ export default function SearchPage() {
     );
   };
 
+  const handleClientSearchChange = (event) => {
+    setClientSearchTerm(event.target.value.toLowerCase());
+  };
+
+  const handleClientSelection = (selectedOption) => {
+    console.log("Selected client type:", selectedOption);
+    setSelectedClients((prevSelected) =>
+      prevSelected.includes(selectedOption)
+        ? prevSelected.filter((client) => client !== selectedOption)
+        : [...prevSelected, selectedOption]
+    );
+  };
+
   const handleTitleSelection = (selectedOption) => {
     if (Array.isArray(selectedOption)) {
       setSelectedTitles(selectedOption);
@@ -286,6 +322,19 @@ export default function SearchPage() {
           : [...prevSelected, selectedOption]
       );
     }
+  };
+
+  const handleClientCodeSelection = (selectedOption) => {
+    console.log("Selected client code:", selectedOption);
+    setSelectedClientCodes((prevSelected) =>
+      prevSelected.includes(selectedOption)
+        ? prevSelected.filter((code) => code !== selectedOption)
+        : [...prevSelected, selectedOption]
+    );
+  };
+
+  const handleClientCodeSearchChange = (event) => {
+    setClientCodeSearchTerm(event.target.value.toLowerCase());
   };
 
   const handleCompanySelection = (companies) => {
@@ -462,50 +511,59 @@ export default function SearchPage() {
       <Navbar />
       <div className="">
         <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex gap-11 items-center border-b border-gray-200 pb-6 pt-14">
-            <h1 className="text-4xl font-bold tracking-tight text-gray-900 mr-4">
-              Prospect search
-            </h1>
-            <Contactandcompany
-              totalContacts={totalContacts}
-              totalCompanies={totalCompanies}
-            />
-            <button
-      onClick={handleDownload}
-      className={`relative flex items-center bg-blue-100 text-blue-800 text-sm font-semibold px-4 py-2 rounded-md transition-all duration-300 hover:from-blue-600 hover:to-blue-800 focus:outline-none ${
-        isLoading ? "cursor-not-allowed" : ""
-      }`}
-      disabled={isLoading}
-    >
-      {isLoading ? (
-        <>
-          <svg
-            className="animate-spin h-5 w-5 mr-3 text-white"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            ></circle>
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0c-5.523 0-10 4.477-10 10h2zm2 5.291A7.952 7.952 0 014 12H2c0 2.21.896 4.21 2.344 5.656l1.656-1.365z"
-            ></path>
-          </svg>
-          Downloading...
-        </>
-      ) : (
-        "Download Excel"
-      )}
-    </button>
-          </div>
+        <div className="flex gap-11 items-center border-b border-gray-200 pb-6 pt-14">
+  <h1 className="text-4xl font-bold tracking-tight text-gray-900 mr-4">
+    Prospect search
+  </h1>
+  <Contactandcompany
+    totalContacts={totalContacts}
+    totalCompanies={totalCompanies}
+  />
+  <button
+    onClick={handleDownload}
+    className={`relative flex items-center bg-blue-100 text-blue-800 text-sm font-semibold px-4 py-2 rounded-md transition-all duration-300 hover:from-blue-600 hover:to-blue-800 focus:outline-none ${
+      isLoading ? "cursor-not-allowed" : ""
+    }`}
+    disabled={isLoading}
+  >
+    {isLoading ? (
+      <>
+        <svg
+          className="animate-spin h-5 w-5 mr-3 text-white"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <circle
+            className="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            strokeWidth="4"
+          ></circle>
+          <path
+            className="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0c-5.523 0-10 4.477-10 10h2zm2 5.291A7.952 7.952 0 014 12H2c0 2.21.896 4.21 2.344 5.656l1.656-1.365z"
+          ></path>
+        </svg>
+        Downloading...
+      </>
+    ) : (
+      "Download Excel"
+    )}
+  </button>
+
+  <button
+    onClick={() => window.location.href = "http://192.168.1.36:3033/search"}
+    className="relative flex items-center bg-green-100 text-green-800 text-sm font-semibold px-4 py-2 rounded-md transition-all duration-300 hover:bg-green-200 focus:outline-none"
+  >
+    Go to 90 days active data
+  </button>
+
+</div>
+
 
           <section aria-labelledby="prospects-heading" className="pb-24 pt-6">
             <h2 id="prospects-heading" className="sr-only">
@@ -588,6 +646,18 @@ export default function SearchPage() {
                   handleRegionSearchChange={handleRegionSearchChange}
                   regionSearchTerm={regionSearchTerm}
                 />
+                <ClientCodeFilter
+                  selectedClientCodes={selectedClientCodes}
+                  handleClientCodeSelection={handleClientCodeSelection}
+                  clientCodeSearchTerm={clientCodeSearchTerm}
+                  handleClientCodeSearchChange={handleClientCodeSearchChange}
+                />
+                <MSFTFilter
+                  selectedClients={selectedClients}
+                  handleClientSelection={handleClientSelection}
+                  clientSearchTerm={clientSearchTerm}
+                  handleClientSearchChange={handleClientSearchChange}
+                />
               </form>
 
               {/* <div className="lg:col-span-3">
@@ -605,7 +675,6 @@ export default function SearchPage() {
                   <ProspectTable prospects={fetchedProspects} />
                 )}
               </div>
-
             </div>
           </section>
         </main>
