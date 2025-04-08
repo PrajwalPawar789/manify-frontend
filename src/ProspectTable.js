@@ -106,7 +106,7 @@ const ProspectTable = ({ prospects }) => {
   };
 
   return (
-    <>
+    <div className="relative">
       <div className="bg-[#f6f6f6] shadow overflow-hidden rounded-md">
         <div className="overflow-auto custom-scrollbar">
           <table className="min-w-full divide-y divide-gray-200">
@@ -288,7 +288,8 @@ const ProspectTable = ({ prospects }) => {
       </div>
 
       {/* Pagination section */}
-      <div className="py-3 flex items-center justify-between">
+      {/* Pagination section - Fixed at the bottom */}
+      <div className=" fixed w-[65%] bottom-0 right-0 bg-white  py-3 flex items-center justify-center right-0 ">
         {/* Previous Button */}
         {currentPage !== 1 && (
           <button
@@ -300,12 +301,7 @@ const ProspectTable = ({ prospects }) => {
         )}
 
         {/* Page Numbers */}
-        <nav
-          className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
-          aria-label="Pagination"
-        >
-          {renderPageNumbers()}
-        </nav>
+        <div className="flex space-x-1">{renderPageNumbers()}</div>
 
         {/* Next Button */}
         {currentPage !== totalPages && (
@@ -317,7 +313,7 @@ const ProspectTable = ({ prospects }) => {
           </button>
         )}
       </div>
-    </>
+    </div>
   );
 };
 

@@ -14,7 +14,7 @@ const LeadTaggingFilter = ({ selectedTags, handleTagSelection, handleTagSearchCh
         <>
           <h3 className="flow-root">
             <Disclosure.Button className="py-2 flex justify-between w-full text-left text-sm font-medium text-gray-700 hover:text-gray-900">
-              <span>Lead Tagging</span>
+              <span>Lead Age</span>
               <span className="ml-6 flex items-center">
                 {open ? (
                   <MinusIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />

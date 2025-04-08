@@ -89,9 +89,10 @@ const filters = [
       id: "Lead Tagging",
       name: "Lead Tagging",
       options: [
-        { value: "Hot lead L1", label: "Hot lead L1" },
-        { value: "Hot lead L2", label: "Hot lead L2" },
-        { value: "Verified", label: "Verified" }
+        { value: "0 to 60 days", label: "0 to 60 days" },
+        { value: "61 to 90 days", label: "61 to 90 days" },
+        { value: "Above 90 days", label: "Above 90 days" }
+        
       ],
     },
     {

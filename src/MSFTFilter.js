@@ -49,7 +49,7 @@ const MSFTFilter = ({ selectedClients, handleClientSelection, handleClientSearch
                 value={clientSearchTerm}
               />
             </div>
-            <div className="max-h-60 overflow-y-auto">
+            <div className="max-h-60 overflow-y-auto">        
               <div className="space-y-2">
                 {filteredClientOptions.map((option, optionIdx) => (
                   <div key={option.value} className="flex items-center">

@@ -12,25 +12,33 @@ const LoginPage = () => {
     const navigate = useNavigate();
 
     // Function to handle login form submission
-    const handleLogin = async (e) => {
-        e.preventDefault(); // Prevent the default form submit action
+// Function to handle login form submission
+const handleLogin = async (e) => {
+    e.preventDefault(); // Prevent the default form submit action
 
-        try {
-            // Attempt to login via your API
-            const response = await axios.post(
-                'http://192.168.1.36:5030/api/v1/login',
-                { username, password },
-                { withCredentials: true }
-            );
-            // If login is successful, navigate to the search page
-            if (response.data.success) {
-                navigate('/search');
-            }
-        } catch (error) {
-            // Log any login errors
-            console.error('Login failed:', error);
+    try {
+        // Attempt to login via your API
+        const response = await axios.post(
+            'http://192.168.1.36:5030/api/v1/login',
+            { username, password },
+            { withCredentials: true }
+        );
+        // If login is successful, navigate to the search page
+        if (response.data.success) {
+            // Store the username in session storage
+            sessionStorage.setItem('username', username);
+            console.log()
+            // Navigate to the search page
+            navigate('/search');
         }
-    };
+
+        const storedUsername = sessionStorage.getItem('username');
+console.log('Stored Username:', storedUsername);
+    } catch (error) {
+        // Log any login errors
+        console.error('Login failed:', error);
+    }
+};
 
     // JSX for the LoginPage component
     return (

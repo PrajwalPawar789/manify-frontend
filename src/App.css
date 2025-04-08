@@ -17,3 +17,10 @@
   background: #555;
 }
 
+.overflowHidden {
+  overflow-y: scroll;
+  scrollbar-width: none; /* For Firefox */
+}
+.overflowHidden::-webkit-scrollbar {
+  display: none; /* For WebKit browsers */
+}
